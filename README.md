@@ -1,6 +1,5 @@
 # SHA256
-
-## This is the SHA256 github repository of BWK Germany.
+This is the SHA256 github repository of BWK Germany.
 
 The integrity of a file can be verified using the widely used SHA256 algorithm.
 
