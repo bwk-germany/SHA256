@@ -1,0 +1,36 @@
+<!doctype html>
+<!--
+ManifestCreate / ManifestCheck
+Copyright (c) 2026 Bernhard Simon Bock
+SPDX-License-Identifier: MIT
+-->
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ManifestCreate / ManifestCheck – lokal im Browser</title><link rel="stylesheet" href="style.css"></head>
+<body><main class="shell">
+<header>
+<div class="eyebrow">DIGITALE DOKUMENTENSAMMLUNGEN<BR/> -> <a class="manual" href="https://github.com/bsbock/BockApps/tree/master/BWK/SHA256/ManifestWebApp" target="new">Anwendungshinweise</a> </div>
+
+<h1>ManifestCreate <span>&</span> ManifestCheck</h1>
+ 
+  
+<p>Erstellen und prüfen Sie SHA-256-Manifeste vollständig lokal in Ihrem Browser.<br/>Es werden keine Dateien an einen Server gesendet.</p></header>
+<nav aria-label="Werkzeug"><button id="tab-create" class="tab active" aria-selected="true">Manifest erstellen</button><button id="tab-check" class="tab" aria-selected="false">Manifest prüfen</button></nav>
+<section id="panel-create" class="panel">
+<h2>ManifestCreate</h2><p>Wählen Sie das Verzeichnis aus, dessen Dateien in das XML-Manifest aufgenommen werden sollen.</p>
+<label class="picker">Verzeichnis auswählen oder hierhin ziehen<input id="create-folder" type="file" webkitdirectory directory multiple></label>
+<div class="selected" id="create-selected">Noch kein Verzeichnis ausgewählt.</div>
+<button id="create-start" class="primary" disabled>Manifest erstellen und herunterladen</button>
+</section>
+<section id="panel-check" class="panel hidden">
+<h2>ManifestCheck</h2><p>Wählen Sie die XML-Manifestdatei und das zu prüfende Verzeichnis. Beide werden ausschließlich lokal gelesen.</p>
+<label class="picker">XML-Manifest auswählen oder hierhin ziehen<input id="check-manifest" type="file" accept=".xml,text/xml,application/xml"></label>
+<div class="selected" id="check-manifest-selected">Noch keine Manifestdatei ausgewählt.</div>
+<label class="picker">Datenverzeichnis auswählen oder hierhin ziehen<input id="check-folder" type="file" webkitdirectory directory multiple></label>
+<div class="selected" id="check-folder-selected">Noch kein Datenverzeichnis ausgewählt.</div>
+<button id="check-start" class="primary" disabled>Prüfung starten</button>
+</section>
+<section class="results" aria-live="polite"><div class="result-head"><h2>Ergebnis</h2><span id="status" class="status">Bereit</span></div>
+<div class="progress"><div id="progress-bar"></div></div><p id="progress-label" class="muted">Wählen Sie eine Funktion und Dateien aus.</p>
+<pre id="result-log" class="log" tabindex="0"></pre><div id="downloads" class="downloads"></div></section>
+<footer>Clientseitige Verarbeitung · SHA-256 · XML-Schema: DocumentManifest, Version 1 · Für aktuelle Versionen von Edge/Chrome · Keine externen Bibliotheken</footer>
+</main><script src="sha256.js"></script><script src="app.js"></script></body></html>

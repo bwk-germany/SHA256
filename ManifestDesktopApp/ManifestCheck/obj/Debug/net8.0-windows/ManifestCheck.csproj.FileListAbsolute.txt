@@ -1,0 +1,15 @@
+F:\data\github\bwk-germany\BwkApps\ManifestCheck\bin\Debug\net8.0-windows\ManifestCheck.exe
+F:\data\github\bwk-germany\BwkApps\ManifestCheck\bin\Debug\net8.0-windows\ManifestCheck.deps.json
+F:\data\github\bwk-germany\BwkApps\ManifestCheck\bin\Debug\net8.0-windows\ManifestCheck.runtimeconfig.json
+F:\data\github\bwk-germany\BwkApps\ManifestCheck\bin\Debug\net8.0-windows\ManifestCheck.dll
+F:\data\github\bwk-germany\BwkApps\ManifestCheck\bin\Debug\net8.0-windows\ManifestCheck.pdb
+F:\data\github\bwk-germany\BwkApps\ManifestCheck\obj\Debug\net8.0-windows\ManifestCheck.GeneratedMSBuildEditorConfig.editorconfig
+F:\data\github\bwk-germany\BwkApps\ManifestCheck\obj\Debug\net8.0-windows\ManifestCheck.AssemblyInfoInputs.cache
+F:\data\github\bwk-germany\BwkApps\ManifestCheck\obj\Debug\net8.0-windows\ManifestCheck.AssemblyInfo.cs
+F:\data\github\bwk-germany\BwkApps\ManifestCheck\obj\Debug\net8.0-windows\ManifestCheck.csproj.CoreCompileInputs.cache
+F:\data\github\bwk-germany\BwkApps\ManifestCheck\obj\Debug\net8.0-windows\ManifestCheck.sourcelink.json
+F:\data\github\bwk-germany\BwkApps\ManifestCheck\obj\Debug\net8.0-windows\ManifestCheck.dll
+F:\data\github\bwk-germany\BwkApps\ManifestCheck\obj\Debug\net8.0-windows\refint\ManifestCheck.dll
+F:\data\github\bwk-germany\BwkApps\ManifestCheck\obj\Debug\net8.0-windows\ManifestCheck.pdb
+F:\data\github\bwk-germany\BwkApps\ManifestCheck\obj\Debug\net8.0-windows\ManifestCheck.genruntimeconfig.cache
+F:\data\github\bwk-germany\BwkApps\ManifestCheck\obj\Debug\net8.0-windows\ref\ManifestCheck.dll

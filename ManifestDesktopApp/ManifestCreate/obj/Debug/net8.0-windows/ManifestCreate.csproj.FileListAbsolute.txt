@@ -1,0 +1,16 @@
+F:\data\github\bwk-germany\BwkApps\ManifestCreate\bin\Debug\net8.0-windows\ManifestCreate.exe
+F:\data\github\bwk-germany\BwkApps\ManifestCreate\bin\Debug\net8.0-windows\ManifestCreate.deps.json
+F:\data\github\bwk-germany\BwkApps\ManifestCreate\bin\Debug\net8.0-windows\ManifestCreate.runtimeconfig.json
+F:\data\github\bwk-germany\BwkApps\ManifestCreate\bin\Debug\net8.0-windows\ManifestCreate.dll
+F:\data\github\bwk-germany\BwkApps\ManifestCreate\bin\Debug\net8.0-windows\ManifestCreate.pdb
+F:\data\github\bwk-germany\BwkApps\ManifestCreate\obj\Debug\net8.0-windows\ManifestCreate.GeneratedMSBuildEditorConfig.editorconfig
+F:\data\github\bwk-germany\BwkApps\ManifestCreate\obj\Debug\net8.0-windows\ManifestCreate.AssemblyInfoInputs.cache
+F:\data\github\bwk-germany\BwkApps\ManifestCreate\obj\Debug\net8.0-windows\ManifestCreate.AssemblyInfo.cs
+F:\data\github\bwk-germany\BwkApps\ManifestCreate\obj\Debug\net8.0-windows\ManifestCreate.csproj.CoreCompileInputs.cache
+F:\data\github\bwk-germany\BwkApps\ManifestCreate\obj\Debug\net8.0-windows\ManifestCreate.sourcelink.json
+F:\data\github\bwk-germany\BwkApps\ManifestCreate\obj\Debug\net8.0-windows\ManifestCreate.dll
+F:\data\github\bwk-germany\BwkApps\ManifestCreate\obj\Debug\net8.0-windows\refint\ManifestCreate.dll
+F:\data\github\bwk-germany\BwkApps\ManifestCreate\obj\Debug\net8.0-windows\ManifestCreate.pdb
+F:\data\github\bwk-germany\BwkApps\ManifestCreate\obj\Debug\net8.0-windows\ManifestCreate.genruntimeconfig.cache
+F:\data\github\bwk-germany\BwkApps\ManifestCreate\obj\Debug\net8.0-windows\ref\ManifestCreate.dll
+F:\data\github\bwk-germany\BwkApps\ManifestCreate\obj\Debug\net8.0-windows\Manifest.6ECCDB1E.Up2Date
