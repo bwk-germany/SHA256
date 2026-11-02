@@ -9,7 +9,7 @@ die in dem Artikel "Das digitale Original als Ersatz für analoge Mehrausfertig
 
 Die in dem o.g. Artikel verwendeten Beispieldateien befinden sich unter [ManifestExample](ManifestExample).
 
-Für die direkte Verwendung von **ManifestCreate** und **ManifestCheck** als WebApp [klicken Sie bitte hier](https://www.bock-nw.de/bwk/sha256/).
+Für die direkte Verwendung von **ManifestCreate** und **ManifestCheck** als WebApp [klicken Sie bitte hier](https://www.bock-nw.de/sha256/).
 
 
 ### Was ist SHA256?
