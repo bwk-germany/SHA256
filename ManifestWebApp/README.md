@@ -1,4 +1,5 @@
 # ManifestCreate / ManifestCheck – Browser-Version
+Die vorliegende HTML-Anwendung ist eine beispielhafte Implementierung des im Fachartikel "Das digitale Original als Ersatz für analoge Mehrausfertigungen", Wasser und Abfall, Heft 04/2026, Verlag Springer Fachmedien Wiesbaden GmbH beschriebenen Verfahrens zur Erstellung und Prüfung von SHA-256-Manifestdateien für digitale Dokumentensammlungen.
 
 <img src="ManifestWebApp.png" alt="ManifestWebApp" width="400">.
 
