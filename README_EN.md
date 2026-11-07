@@ -3,7 +3,7 @@
 
 This is the SHA256 github repository of BWK Germany.
 
-For direct use see [ManifestCreate and ManifestCheck](https://www.bock-nw.de/bwk/sha256/) (only German, deutschsprachige WebApp für ManifestCreate und ManifestCheck)
+For direct use see [ManifestCreate and ManifestCheck](https://www.bock-nw.de/sha256/) (German-language web app for ManifestCreate and ManifestCheck; see “Anwendungshinweise” for instructions)
 
 
 ### What is SHA256
