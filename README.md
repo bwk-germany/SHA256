@@ -2,7 +2,7 @@
 
 **English version: [click here](README_EN.md)**
 
-Sie befinden sich auf dem github repository des BWK zum Thema SHA256.
+Sie befinden sich auf dem github repository des BWK zum Thema SHA256. 
 
 Zur eindeutigen Identifizierung des Inhaltes von Dateiverzeichnissen befindet sich in diesem [Repository](ManifestDesktopApp) der C#-Quellcode für die PC-Anwendungen **ManifestCreate** und **ManifestCheck**,
 die in dem Artikel "Das digitale Original als Ersatz für analoge Mehrausfertigungen" (Wasser und Abfall, Heft 11/2026, Verlag Springer Fachmedien Wiesbaden GmbH) beschrieben sind.
