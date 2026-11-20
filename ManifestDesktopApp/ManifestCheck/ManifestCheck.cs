@@ -2,7 +2,8 @@
 // ManifestCreate / ManifestCheck
 // Copyright (c) 2026 Bernhard Simon Bock
 // SPDX-License-Identifier: MIT
-
+// 01.11.2026: initial release
+// 20.11.2026: exclude system and hidden files 
 
 using System.Security.Cryptography; 
 using System.Xml;
@@ -113,6 +114,7 @@ static void ManifestCheck(string manifestFileName, string dataPath)
     // Tatsächliche Dateien im Datenverzeichnis ermitteln
     Dictionary<string, string> realFiles = Directory
         .EnumerateFiles(dataPath, "*", SearchOption.AllDirectories)
+		.Where(f => !ManifestFiles.Exclude(dataPath, f)) // added 20.11.2026
         .ToDictionary(
             f => NormalizeRelativePath(Path.GetRelativePath(dataPath,f)),
             f => f,

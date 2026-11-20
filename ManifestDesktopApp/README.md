@@ -7,6 +7,10 @@ Das Verzeichnis ManifestDesktopApp enthält den C#-Code für die Windows-Desktop
 <BR/>
 <BR/>
 Das Verzeichnis [**ManifestLibrary**](ManifestLibrary) enthält Code, der gemeinsam von [**ManifestCreate**](ManifestCreate) und [**ManifestCheck**](ManifestCheck) verwendet wird.
+<BR/>
+<BR/>
+Bei der Erstellung des Manifests werden Dateien mit den Namen Thumbs.db und desktop.ini sowie sämtliche Dateien und Verzeichnisse, deren Name mit einem Punkt beginnt, nicht berücksichtigt. 
+Diese Regel gilt unabhängig vom Betriebssystem und wird auch bei der Prüfung auf zusätzliche Dateien angewendet.
 
 ---
 

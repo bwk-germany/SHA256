@@ -2,7 +2,8 @@
 // ManifestCreate / ManifestCheck
 // Copyright (c) 2026 Bernhard Simon Bock
 // SPDX-License-Identifier: MIT
-
+// 01.11.2026: initial release
+// 20.11.2026: exclude system and hidden files 
 
 using System.Security.Cryptography;
 using System.Xml;
@@ -25,7 +26,8 @@ DocumentManifest manifest = new();
 
 int index = 1;
 
-foreach (string file in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories).OrderBy(f => f))
+//foreach (string file in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories).OrderBy(f => f)) // removed 20.11.2026
+foreach (string file in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories).Where(f => !ManifestFiles.Exclude(path, f)).OrderBy(f => f)) // added 20.11.2026
         {using FileStream stream = File.OpenRead(file);
          manifest.Document.Add(
              new DocumentEntry{Index = index++,

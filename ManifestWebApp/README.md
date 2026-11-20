@@ -29,6 +29,9 @@ Die vorliegende HTML-Anwendung ist eine beispielhafte Implementierung des im Fac
   - Die XML-Bytefolge ist nicht garantiert identisch zur Ausgabe des .NET (C#)XmlSerializer (u.a. Kommentar/Whitespace/Attributreihenfolge).
 
 ## Technische Hinweise
+Bei der Erstellung des Manifests werden Dateien mit den Namen Thumbs.db und desktop.ini sowie sämtliche Dateien und Verzeichnisse, deren Name mit einem Punkt beginnt, nicht berücksichtigt. 
+Diese Regel gilt unabhängig vom Betriebssystem und wird auch bei der Prüfung auf zusätzliche Dateien angewendet.
+
   - Rekursive Verzeichnisauswahl über webkitdirectory (Edge/Chrome).
   - SHA256 blockweise mit eigenständiger JavaScript-Implementierung.
   - Keine Verzeichnisse ohne Dateien im Manifest (wie beim C#-Original).
@@ -43,7 +46,7 @@ Die vorliegende HTML-Anwendung ist eine beispielhafte Implementierung des im Fac
   Es ist keine Installation und kein Server erforderlich.<br>
   Die Anwendung ist auch auf einem lokalen Dateiverzeichnis lauffähig.<br>
 
-In diesem Verzeichnis befinden sich die erfoderlichen Dateien für **ManifestCreate** and **ManifestCheck** als WebApp.
+In diesem Verzeichnis befinden sich die erforderlichen Dateien für **ManifestCreate** and **ManifestCheck** als WebApp.
 
 - index.html
 - app.js

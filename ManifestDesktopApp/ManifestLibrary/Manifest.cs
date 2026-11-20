@@ -2,7 +2,8 @@
 // ManifestCreate / ManifestCheck
 // Copyright (c) 2026 Bernhard Simon Bock
 // SPDX-License-Identifier: MIT
-
+// 01.11.2026: initial release
+// 20.11.2026: exclude system and hidden files 
 
 using System.Xml;
 using System.Xml.Serialization;
@@ -25,7 +26,17 @@ public class DocumentEntry{
 [XmlAttribute] public long Size;
 }
 
+public static class ManifestFiles{
+public static bool Exclude(string path)
+    {string name = Path.GetFileName(Path.TrimEndingDirectorySeparator(path));
+     return name.StartsWith(".") || name.Equals("Thumbs.db", StringComparison.OrdinalIgnoreCase)|| name.Equals("desktop.ini", StringComparison.OrdinalIgnoreCase);
+    }
 
+public static bool Exclude(string root, string path)
+    {string relative = Path.GetRelativePath(root, path);
+     return relative.Split(Path.DirectorySeparatorChar,Path.AltDirectorySeparatorChar).Any(Exclude);
+    }
+}
 
 
 public static class MessageBoxEx
