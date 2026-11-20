@@ -1,0 +1,294 @@
+<!doctype html>
+<!--
+ManifestCreate / ManifestCheck single file version
+Copyright (c) 2026 Bernhard Simon Bock
+SPDX-License-Identifier: MIT
+exclude system and hidden files 
+includes SHA-256 implementation according to FIPS 180-4, Algorithm specified by NIST (National Institute of Standards and Technology). JavaScript implementation generated with ChatGPT (OpenAI). No external JavaScript libraries required.
+-->
+<html lang="de">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ManifestCreate / ManifestCheck – lokal im Browser</title>
+
+<style>
+    * {box-sizing: border-box;}
+    body {margin: 0;background: #f2f5f8;color: #17283a;font: 16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;}
+    .shell {max-width: 930px;margin: 38px auto;padding: 0 20px;}
+    header {padding: 32px 36px;background: #102b44;color: #fff;border-radius: 18px 18px 0 0;}
+    h1 {font-size: clamp(25px,4vw,37px);line-height: 1.18;margin: 8px 0 14px;}
+    h1 span {color: #75c4de;}
+    .eyebrow {font-size: 12px;letter-spacing: 2px;color: #a8d8e8;font-weight: 700;}
+    .manual {font-size: 12px;letter-spacing: 2px;color: #000000;background: #8fff8f;font-weight: 700;text-align: right;}
+    header p {max-width: 750px;color: #e1ebf3;margin-bottom: 0;}
+    nav {display: flex;background: #dfe8ef;gap: 8px;padding: 12px 16px;}
+    button {font: inherit;cursor: pointer;border: 0;border-radius: 8px;padding: 11px 17px;font-weight: 650;}
+    .tab {flex: 1;background: transparent;color: #28445b;}
+    .tab.active {background: #fff;color: #0a5b85;box-shadow: 0 1px 6px #0a243119;}
+    .panel, .results {background: white;padding: 25px 34px;border-bottom: 1px solid #e2e9ef;}
+    .panel h2, .results h2 {font-size: 22px;margin: 0 0 5px;}
+    .panel p {color: #506579;margin-top: 0;}
+    .hidden {display: none;}
+    .picker {display: block;position: relative;overflow: hidden;border: 1px dashed #8eafc3;background: #f7fbfe;color: #145b83;padding: 15px 18px;border-radius: 9px;font-weight: 650;cursor: pointer;margin-top: 18px;}
+    .picker:hover {background: #e9f5fb;}
+    .picker input {position: absolute;opacity: 0;inset: 0;width: 100%;height: 100%;cursor: pointer;}
+    .selected {font-size: 14px;color: #596e7e;margin: 7px 0 14px;overflow-wrap: anywhere;}
+    .primary {background: #006d9d;color: white;width: 100%;margin-top: 10px;}
+    .primary:hover:not(:disabled) {background: #00547a;}
+    button:disabled {opacity: .45;cursor: not-allowed;}
+    .result-head {display: flex;align-items: center;justify-content: space-between;gap: 10px;}
+    .status {background: #edf2f6;color: #415b6e;border-radius: 99px;padding: 3px 12px;font-size: 13px;font-weight: 700;}
+    .status.good {background: #e5f5e8;color: #176a32;}
+    .status.bad {background: #ffebe9;color: #a22b22;}
+    .progress {height: 8px;background: #e8eef3;border-radius: 99px;overflow: hidden;margin: 16px 0 8px;}
+    #progress-bar {width: 0;height: 100%;background: #0084b7;transition: width .1s;}
+    .muted {color: #617587;font-size: 14px;}
+    .log {font: 13px/1.55 Consolas,Monaco,monospace;background: #f5f7fa;border: 1px solid #e3eaf0;padding: 14px;white-space: pre-wrap;overflow-wrap: anywhere;min-height: 70px;max-height: 360px;overflow: auto;}
+    .log:empty {display: none;}
+    .downloads {display: flex;gap: 10px;flex-wrap: wrap;}
+    .download {display: inline-block;background: #e8f5fc;border: 1px solid #b7d9e9;color: #075e8b;text-decoration: none;border-radius: 8px;padding: 9px 15px;font-weight: 650;}
+    footer {font-size: 12px;text-align: center;color: #687c8b;padding: 22px;}
+    @media(max-width:600px) {
+        .shell {margin: 0;padding: 0;}
+        header {border-radius: 0;padding: 24px;}
+        .panel, .results {padding: 22px;}
+        nav {padding: 9px;}
+        .tab {font-size: 14px;padding: 10px 5px;}
+    }
+    .picker.dragover {background: #d9f0fc;border-color: #006d9d;outline: 2px solid #006d9d;}
+</style>
+
+</head>
+<body><main class="shell">
+<header>
+<div class="eyebrow">DIGITALE DOKUMENTENSAMMLUNGEN<BR/> -> <a class="manual" href="https://github.com/bwk-germany/SHA256/tree/main/ManifestWebApp" target="_blank" rel="noopener noreferrer">Anwendungshinweise</a> </div>
+
+<h1>ManifestCreate <span>&</span> ManifestCheck</h1>
+ 
+  
+<p>Erstellen und prüfen Sie SHA-256-Manifeste vollständig lokal in Ihrem Browser.<br/>Es werden keine Dateien an einen Server gesendet.</p></header>
+<nav aria-label="Werkzeug"><button id="tab-create" class="tab active" aria-selected="true">Manifest erstellen</button><button id="tab-check" class="tab" aria-selected="false">Manifest prüfen</button></nav>
+<section id="panel-create" class="panel">
+<h2>ManifestCreate</h2><p>Wählen Sie das Verzeichnis aus, dessen Dateien in das XML-Manifest aufgenommen werden sollen.</p>
+<label class="picker">Verzeichnis auswählen oder hierhin ziehen<input id="create-folder" type="file" webkitdirectory directory multiple></label>
+<div class="selected" id="create-selected">Noch kein Verzeichnis ausgewählt.</div>
+<button id="create-start" class="primary" disabled>Manifest erstellen und herunterladen</button>
+</section>
+<section id="panel-check" class="panel hidden">
+<h2>ManifestCheck</h2><p>Wählen Sie die XML-Manifestdatei und das zu prüfende Verzeichnis. Beide werden ausschließlich lokal gelesen.</p>
+<label class="picker">XML-Manifest auswählen oder hierhin ziehen<input id="check-manifest" type="file" accept=".xml,text/xml,application/xml"></label>
+<div class="selected" id="check-manifest-selected">Noch keine Manifestdatei ausgewählt.</div>
+<label class="picker">Datenverzeichnis auswählen oder hierhin ziehen<input id="check-folder" type="file" webkitdirectory directory multiple></label>
+<div class="selected" id="check-folder-selected">Noch kein Datenverzeichnis ausgewählt.</div>
+<button id="check-start" class="primary" disabled>Prüfung starten</button>
+</section>
+<section class="results" aria-live="polite"><div class="result-head"><h2>Ergebnis</h2><span id="status" class="status">Bereit</span></div>
+<div class="progress"><div id="progress-bar"></div></div><p id="progress-label" class="muted">Wählen Sie eine Funktion und Dateien aus.</p>
+<pre id="result-log" class="log" tabindex="0"></pre><div id="downloads" class="downloads"></div></section>
+<footer>Clientseitige Verarbeitung · SHA-256 · XML-Schema: DocumentManifest, Version 1 · Für aktuelle Versionen von Edge/Chrome · Keine externen Bibliotheken</footer>
+</main>
+
+<script>
+/* Incremental SHA-256 (FIPS 180-4), standalone, no external dependencies. */
+'use strict';
+class Sha256 {
+  constructor() {
+    this.h = new Uint32Array([0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19]);
+    this.buffer = new Uint8Array(64); this.used = 0; this.bytes = 0;
+  }
+  static get k() { return Sha256._k || (Sha256._k = new Uint32Array([
+    0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+    0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+    0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+    0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+    0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+    0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+    0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+    0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2])); }
+  static rotr(x,n) { return (x>>>n)|(x<<(32-n)); }
+  block(b, offset=0) {
+    const w = new Uint32Array(64);
+    for(let i=0;i<16;i++) { let j=offset+i*4; w[i]=((b[j]<<24)|(b[j+1]<<16)|(b[j+2]<<8)|b[j+3])>>>0; }
+    for(let i=16;i<64;i++) {
+      const x=w[i-15], y=w[i-2];
+      w[i]=(w[i-16]+(Sha256.rotr(x,7)^Sha256.rotr(x,18)^(x>>>3))+w[i-7]+(Sha256.rotr(y,17)^Sha256.rotr(y,19)^(y>>>10)))>>>0;
+    }
+    let [a,b0,c,d,e,f,g,h]=this.h, k=Sha256.k;
+    for(let i=0;i<64;i++) {
+      const t1=(h+(Sha256.rotr(e,6)^Sha256.rotr(e,11)^Sha256.rotr(e,25))+((e&f)^(~e&g))+k[i]+w[i])>>>0;
+      const t2=((Sha256.rotr(a,2)^Sha256.rotr(a,13)^Sha256.rotr(a,22))+((a&b0)^(a&c)^(b0&c)))>>>0;
+      h=g;g=f;f=e;e=(d+t1)>>>0;d=c;c=b0;b0=a;a=(t1+t2)>>>0;
+    }
+    const z=[a,b0,c,d,e,f,g,h]; for(let i=0;i<8;i++) this.h[i]=(this.h[i]+z[i])>>>0;
+  }
+  update(input) {
+    const data = input instanceof Uint8Array ? input : new Uint8Array(input);
+    this.bytes+=data.length;
+    let i=0;
+    if(this.used) { const n=Math.min(64-this.used,data.length);this.buffer.set(data.subarray(0,n),this.used);this.used+=n;i+=n;if(this.used===64){this.block(this.buffer);this.used=0;} }
+    while(i+64<=data.length) { this.block(data,i); i+=64; }
+    if(i<data.length) { this.buffer.set(data.subarray(i),0);this.used=data.length-i; }
+    return this;
+  }
+  digestHex() {
+    const bits=this.bytes*8;
+    this.buffer[this.used++]=0x80;
+    if(this.used>56){this.buffer.fill(0,this.used,64);this.block(this.buffer);this.used=0;}
+    this.buffer.fill(0,this.used,56);
+    const hi=Math.floor(bits/0x100000000),lo=bits>>>0;
+    for(let i=0;i<4;i++){this.buffer[56+i]=(hi>>>(24-i*8))&255;this.buffer[60+i]=(lo>>>(24-i*8))&255;}
+    this.block(this.buffer);
+    return Array.from(this.h,x=>x.toString(16).padStart(8,'0')).join('');
+  }
+}
+async function hashFile(file, progress) {
+  const sha=new Sha256(), chunkSize=4*1024*1024;
+  for(let offset=0;offset<file.size;offset+=chunkSize){
+    const buf=await file.slice(offset,Math.min(offset+chunkSize,file.size)).arrayBuffer();
+    sha.update(new Uint8Array(buf));
+    if(progress)progress(Math.min(offset+chunkSize,file.size));
+  }
+  return sha.digestHex();
+}
+</script>
+
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const encoder=new TextEncoder();
+const NL='\r\n';
+const COMMENT=`\nAutomatically generated using ManifestCreate, available at: https://github.com/bwk-germany/sha256\n\nDO NOT EDIT THIS FILE MANUALLY.\nAny modification will cause the SHA-256 checksum in the file name to no longer match the contents of this file.\n`;
+let working=false, activeUrls=[];
+function escapeXml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');}
+function normalize(s){return s.replace(/\\/g,'/').trim();}
+function key(s){return normalize(s).toLowerCase();}
+function exclude(path) {return path.split(/[\\/]/).some(name => {const n = name.toLowerCase();return n.startsWith(".") || n === "thumbs.db" || n === "desktop.ini";});}
+function selection(input) {
+    const allFiles = Array.from(input.files || []);
+    const first = allFiles[0];
+    if (!first) return { files: [], root: '' };
+    const prefix = (first.webkitRelativePath || '').split('/')[0];
+    const files = allFiles.map(f => ({file: f,name: (f.webkitRelativePath || f.name).split('/').slice(1).join('/') || f.name})).filter(f => !exclude(f.name));
+    return {root: prefix || 'Dokumente',files: files};
+}
+function setProgress(p,label){$('progress-bar').style.width=`${Math.min(100,Math.max(0,p))}%`;if(label)$('progress-label').textContent=label;}
+function status(label,mode=''){$('status').textContent=label;$('status').className='status '+mode;}
+function clearResult(){for(const url of activeUrls)URL.revokeObjectURL(url);activeUrls=[];$('downloads').replaceChildren();$('result-log').textContent='';setProgress(0,'Verarbeitung läuft …');status('In Bearbeitung');}
+function addDownload(name,bytes,mime,label){const url=URL.createObjectURL(new Blob([bytes],{type:mime}));activeUrls.push(url);const a=document.createElement('a');a.className='download';a.href=url;a.download=name;a.textContent=label||name;$('downloads').append(a);}
+function setBusy(b){working=b;updateButtons();}
+function updateButtons(){ $('create-start').disabled=working||!$('create-folder').files.length; $('check-start').disabled=working||!$('check-folder').files.length||!$('check-manifest').files.length; }
+function localTimestamp(){const d=new Date(),z=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())} ${z(d.getHours())}:${z(d.getMinutes())}:${z(d.getSeconds())}`;}
+function buildXml(entries){
+  const lines=['<?xml version="1.0" encoding="utf-8"?>',`<!--${COMMENT}-->`, '<DocumentManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ManifestVersion="1" HashAlgorithm="SHA-256">'];
+  for(const e of entries)lines.push(`    <Document Index="${e.index}" Name="${escapeXml(e.name)}" Hash="${e.hash}" Size="${e.size}" />`);
+  lines.push('</DocumentManifest>');
+  // UTF-8 BOM and Windows CRLF, as used by XmlWriterSettings(Encoding.UTF8) on Windows.
+  let xml = lines.join(NL);xml = xml.replace(/\r\n|\r|\n/g, "\r\n");const content=encoder.encode(xml),out=new Uint8Array(content.length+3);
+  out.set([0xef,0xbb,0xbf]);out.set(content,3);return out;
+}
+async function createManifest(){
+  if(working)return;setBusy(true);clearResult();
+  try{
+    const selected=selection($('create-folder'));const files=selected.files;
+    if(!files.length)throw Error('Keine Dateien ausgewählt.');
+    // C# OrderBy(f => f) verwendet eine kulturabhängige Sortierung (z. B. de-DE).
+    // Ein fester Locale-Wert liefert unabhängig von der Browsersprache dieselbe Reihenfolge.
+    const collator = new Intl.Collator("de-DE", { sensitivity: "variant", numeric: false });
+    files.sort((a,b)=>collator.compare(a.name,b.name));
+    const entries=[];let done=0;
+    for(const item of files){
+      const hash=await hashFile(item.file);entries.push({index:entries.length+1,name:item.name.replace(/\//g,'\\'),hash,size:item.file.size});
+      done++;setProgress(100*done/files.length,`Datei ${done}/${files.length}: ${item.name}`);
+      await new Promise(resolve=>setTimeout(resolve,0));
+    }
+    const bytes=buildXml(entries);const sha=new Sha256().update(bytes).digestHex();
+    const filename=`${selected.root}.sha256.${sha}.xml`;
+    addDownload(filename,bytes,'application/xml;charset=utf-8','XML-Manifest herunterladen');
+    $('result-log').textContent=`OK: ${entries.length} Dateien erfasst.\nSHA-256 der Manifestdatei: ${sha}\nDateiname: ${filename}\n\nDie Manifestdatei wird im Download-Ordner gespeichert, nicht automatisch im übergeordneten Datenverzeichnis.`;
+    status('Erstellt','good');setProgress(100,'Manifest erfolgreich erstellt.');
+  }catch(e){fail(e);}finally{setBusy(false);}
+}
+function parseXml(text){
+  const doc=new DOMParser().parseFromString(text,'application/xml');
+  if(doc.querySelector('parsererror'))throw Error('XML ist syntaktisch ungültig.');
+  const root=doc.documentElement;
+  if(root.localName!=='DocumentManifest')throw Error('XML-Wurzelelement ist nicht DocumentManifest.');
+  const version=root.getAttribute('ManifestVersion')??'1',algo=root.getAttribute('HashAlgorithm')??'SHA-256';
+  const entries=[];
+  for(const node of root.children){
+    if(node.localName!=='Document')continue;
+    const size=Number(node.getAttribute('Size')??0);
+    if(!Number.isSafeInteger(size)||size<0)throw Error(`Ungültige Dateigröße: ${node.getAttribute('Size')}`);
+    entries.push({name:node.getAttribute('Name')||'',hash:node.getAttribute('Hash')||'',size});
+  }
+  return {version,algo,entries};
+}
+async function checkManifest(){
+  if(working)return;setBusy(true);clearResult();
+  const file=$('check-manifest').files[0],sel=selection($('check-folder'));
+  const log=['Manifest check',`Date/Time    : ${localTimestamp()}`,`Manifest file: ${file.name}`,`Data path    : ${sel.root}`,''];
+  let ok=true;
+  try{
+    log.push('1. Format, XML content, version and file name');
+    const m=/^(.+)\.sha256\.([a-fA-F0-9]{64})\.xml$/.exec(file.name);
+    if(m)log.push('OK: File name contains SHA-256 checksum.');else {ok=false;log.push("ERROR: File name does not match pattern '<name>.sha256.<64 hex chars>.xml'.");}
+    const manifestBytes=new Uint8Array(await file.arrayBuffer());
+    let parsed;
+    try{parsed=parseXml(new TextDecoder('utf-8',{fatal:true}).decode(manifestBytes));
+      if(Number(parsed.version)!==1){ok=false;log.push(`ERROR: Unsupported manifest version: ${parsed.version}`);}
+      else if(parsed.algo.toLowerCase()!=='sha-256'){ok=false;log.push(`ERROR: Unsupported hash algorithm: ${parsed.algo}`);}
+      else log.push('OK: XML content, manifest version and hash algorithm are valid.');
+    }catch(e){ok=false;log.push('ERROR: XML deserialization failed.',e.message);}
+    log.push('');
+    if(parsed){
+      log.push('2. Manifest checksum from file name');
+      if(m){const actual=new Sha256().update(manifestBytes).digestHex(),expected=m[2].toLowerCase();
+        if(actual===expected)log.push('OK: SHA-256 checksum in file name matches manifest file content.');
+        else{ok=false;log.push('ERROR: SHA-256 checksum in file name does not match manifest file content.',`Expected: ${expected}`,`Actual  : ${actual}`);}
+      }
+      log.push('');
+      const manifestFiles=new Map(),realFiles=new Map();
+      for(const e of parsed.entries){const k=key(e.name);if(manifestFiles.has(k))throw Error(`Duplicate file name in manifest: ${e.name}`);manifestFiles.set(k,e);}
+      for(const e of sel.files){const k=key(e.name);if(realFiles.has(k))throw Error(`Duplicate path differing only by case: ${e.name}`);realFiles.set(k,e);}
+      log.push('3. File existence');let existOk=true;
+      for(const [k,e] of manifestFiles)if(!realFiles.has(k)){ok=false;existOk=false;log.push(`ERROR: Missing file: ${normalize(e.name)}`);}
+      for(const [k,e] of realFiles)if(!manifestFiles.has(k)){ok=false;existOk=false;log.push(`ERROR: Extra file not listed in manifest: ${normalize(e.name)}`);}
+      if(existOk)log.push('OK: All files exist and no extra files were found.');
+      log.push('','4. File size');let sizeOk=true;
+      for(const e of parsed.entries){const r=realFiles.get(key(e.name));if(!r)continue;
+        if(r.file.size!==e.size){ok=false;sizeOk=false;log.push(`ERROR: Size mismatch: ${e.name}`,`Expected: ${e.size}`,`Actual  : ${r.file.size}`);}
+      }
+      if(sizeOk)log.push('OK: All file sizes match.');
+      log.push('','5. File SHA-256 checksums');let hashOk=true,done=0;
+      for(const e of parsed.entries){const r=realFiles.get(key(e.name));if(!r)continue;
+        const actual=await hashFile(r.file),expected=e.hash.toLowerCase();done++;
+        setProgress(100*done/Math.max(1,parsed.entries.length),`Datei ${done}/${parsed.entries.length}: ${e.name}`);
+        if(actual!==expected){ok=false;hashOk=false;log.push(`ERROR: SHA-256 mismatch: ${e.name}`,`Expected: ${expected}`,`Actual  : ${actual}`);}
+        await new Promise(resolve=>setTimeout(resolve,0));
+      }
+      if(hashOk)log.push('OK: All SHA-256 checksums match.');
+      log.push('','6. Result',ok?'OK: Manifest check successful.':'ERROR: Manifest check failed.');
+    }
+  }catch(e){ok=false;log.push('',`ERROR: ${e.message}`,'','6. Result','ERROR: Manifest check failed.');}
+  const logname=file.name.replace(/\.xml$/,'')+'.check.log';
+  const logtext=log.join(NL)+NL;
+  // .NET File.WriteAllLines(..., Encoding.UTF8) produces a UTF-8 BOM.
+  addDownload(logname,new Uint8Array([0xef,0xbb,0xbf,...encoder.encode(logtext)]),'text/plain;charset=utf-8','Prüfprotokoll herunterladen');
+  $('result-log').textContent=logtext;status(ok?'Prüfung erfolgreich':'Abweichungen gefunden',ok?'good':'bad');
+  setProgress(100,ok?'Alle Prüfungen erfolgreich.':'Prüfung abgeschlossen – Einzelheiten im Protokoll.');setBusy(false);
+}
+function fail(e){status('Fehler','bad');$('result-log').textContent=`ERROR: ${e.message}`;setProgress(0,'Verarbeitung fehlgeschlagen.');}
+for(const id of ['create-folder','check-manifest','check-folder'])$(id).addEventListener('change',()=>{
+  const selected=id==='check-manifest' ? ($('check-manifest').files[0]?.name||'Noch keine Manifestdatei ausgewählt.') : (()=>{const s=selection($(id));return s.files.length?`${s.root} · ${s.files.length} Datei(en)`:'Noch kein Verzeichnis ausgewählt.';})();
+  $(id==='create-folder'?'create-selected':id==='check-folder'?'check-folder-selected':'check-manifest-selected').textContent=selected;
+  updateButtons();
+});
+for(const mode of ['create','check'])$('tab-'+mode).addEventListener('click',()=>{
+  if(working)return;
+  for(const m of ['create','check']){$('panel-'+m).classList.toggle('hidden',m!==mode);$('tab-'+m).classList.toggle('active',m===mode);$('tab-'+m).setAttribute('aria-selected',String(m===mode));}
+});
+$('create-start').addEventListener('click',createManifest);
+$('check-start').addEventListener('click',checkManifest);
+</script>
+
+</body>
+</html>

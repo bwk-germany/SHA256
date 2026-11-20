@@ -1,6 +1,8 @@
 // ManifestCreate / ManifestCheck
 // Copyright (c) 2026 Bernhard Simon Bock
 // SPDX-License-Identifier: MIT
+// 01.11.2026: initial release
+// 20.11.2026: exclude system and hidden files 
 'use strict';
 const $=id=>document.getElementById(id);
 const encoder=new TextEncoder();
@@ -10,11 +12,14 @@ let working=false, activeUrls=[];
 function escapeXml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');}
 function normalize(s){return s.replace(/\\/g,'/').trim();}
 function key(s){return normalize(s).toLowerCase();}
-function selection(input){
-  const files=Array.from(input.files||[]), first=files[0];
-  if(!first)return {files:[],root:''};
-  const prefix=(first.webkitRelativePath||'').split('/')[0];
-  return {root:prefix||'Dokumente',files:files.map(f=>({file:f,name:(f.webkitRelativePath||f.name).split('/').slice(1).join('/')||f.name}))};
+function exclude(path) {return path.split(/[\\/]/).some(name => {const n = name.toLowerCase();return n.startsWith(".") || n === "thumbs.db" || n === "desktop.ini";});}
+function selection(input) {
+    const allFiles = Array.from(input.files || []);
+    const first = allFiles[0];
+    if (!first) return { files: [], root: '' };
+    const prefix = (first.webkitRelativePath || '').split('/')[0];
+    const files = allFiles.map(f => ({file: f,name: (f.webkitRelativePath || f.name).split('/').slice(1).join('/') || f.name})).filter(f => !exclude(f.name));
+    return {root: prefix || 'Dokumente',files: files};
 }
 function setProgress(p,label){$('progress-bar').style.width=`${Math.min(100,Math.max(0,p))}%`;if(label)$('progress-label').textContent=label;}
 function status(label,mode=''){$('status').textContent=label;$('status').className='status '+mode;}
